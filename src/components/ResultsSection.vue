@@ -1,55 +1,99 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import type { PackageJson } from '../types/packageJson'
+import type { PackageVulnerabilityResult } from '../services/osvClient'
 
 const props = defineProps<{
   packageJson: PackageJson | null
+  results: PackageVulnerabilityResult[]
 }>()
 
-const dependencies = computed(() => {
-  if (!props.packageJson?.dependencies) return []
-  return Object.entries(props.packageJson.dependencies).map(
-    ([name, version]) => ({ name, version })
-  )
+const filter = ref<'all' | 'vulnerable'>('all')
+
+const filteredResults = computed(() => {
+  if (filter.value === 'vulnerable') {
+    return props.results.filter(r => r.vulnerabilities.length > 0)
+  }
+  return props.results
 })
 
-const devDependencies = computed(() => {
-  if (!props.packageJson?.devDependencies) return []
-  return Object.entries(props.packageJson.devDependencies).map(
-    ([name, version]) => ({ name, version })
-  )
-})
-
-const hasData = computed(
-  () => dependencies.value.length > 0 || devDependencies.value.length > 0
+const totalVulnerable = computed(
+  () => props.results.filter(r => r.vulnerabilities.length > 0).length
 )
 </script>
 
 <template>
-  <section v-if="hasData" class="bg-white rounded-lg shadow p-6">
-    <h2 class="text-lg font-semibold mb-4">Dependencies</h2>
+  <section v-if="results.length" class="bg-white rounded-lg shadow p-6 mt-4">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h2 class="text-lg font-semibold">Scan Results</h2>
+        <p class="text-sm text-gray-600">
+          {{ results.length }} packages scanned.
+          {{ totalVulnerable }} with known vulnerabilities.
+        </p>
+      </div>
 
-    <div v-if="dependencies.length">
-      <h3 class="font-semibold mb-2">Dependencies</h3>
-      <ul class="list-disc pl-5 mb-4">
-        <li v-for="dep in dependencies" :key="dep.name">
-          {{ dep.name }}: {{ dep.version }}
-        </li>
-      </ul>
+      <div class="flex items-center gap-2 text-sm">
+        <label>
+          <input
+            type="radio"
+            value="all"
+            v-model="filter"
+          />
+          All
+        </label>
+        <label>
+          <input
+            type="radio"
+            value="vulnerable"
+            v-model="filter"
+          />
+          Vulnerable only
+        </label>
+      </div>
     </div>
 
-    <div v-if="devDependencies.length">
-      <h3 class="font-semibold mb-2">Dev Dependencies</h3>
-      <ul class="list-disc pl-5">
-        <li v-for="dep in devDependencies" :key="dep.name">
-          {{ dep.name }}: {{ dep.version }}
-        </li>
-      </ul>
-    </div>
+    <table class="w-full text-sm border-collapse">
+      <thead>
+        <tr class="border-b">
+          <th class="text-left py-2">Package</th>
+          <th class="text-left py-2">Version</th>
+          <th class="text-left py-2">Vulnerabilities</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="result in filteredResults"
+          :key="result.packageName"
+          :class="[
+            'border-b',
+            result.vulnerabilities.length
+              ? 'bg-red-50'
+              : 'bg-green-50'
+          ]"
+        >
+          <td class="py-2 px-1 font-mono">
+            {{ result.packageName }}
+          </td>
+          <td class="py-2 px-1 font-mono">
+            {{ result.version }}
+          </td>
+          <td class="py-2 px-1">
+            <span v-if="result.vulnerabilities.length === 0">
+              No known vulnerabilities
+            </span>
+            <span v-else>
+              {{ result.vulnerabilities.length }} issue(s)
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </section>
 
   <section v-else class="text-sm text-gray-500 mt-4">
-    No data yet. Please upload a package.json file.
+    No scan results yet. Upload a package.json file to start.
   </section>
 </template>
+
 
