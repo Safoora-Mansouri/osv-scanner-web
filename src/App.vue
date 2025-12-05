@@ -3,8 +3,10 @@ import { ref } from 'vue'
 import FileUploadSection from './components/FileUploadSection.vue'
 import ResultsSection from './components/ResultsSection.vue'
 import type { PackageJson } from './types/packageJson'
+import Footer from './components/Footer.vue'
 import type { PackageVulnerabilityResult } from './services/osvClient'
 import { fetchVulnerabilitiesForPackage } from './services/osvClient'
+
 
 
 
@@ -43,18 +45,25 @@ async function handlePackageJsonLoaded(data: PackageJson) {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-100 text-gray-900">
-    <header class="py-4 px-6 bg-white shadow">
-      <h1 class="text-2xl font-semibold">
-        Package.json Vulnerability Scanner
-      </h1>
-      <p class="text-sm text-gray-600">
-        Upload your package.json to scan dependencies using OSV.dev.
-      </p>
-    </header>
+  
+  <div class="min-h-screen bg-stone-100 text-gray-900">
+   
+<header class="py-4 px-6 bg-stone-100  flex flex-col items-center ">
+<div class="flex items-center">
+  <img src="/osv_logo.png" alt="OSV" class="w-20 h-20" />
+  <!-- <h1 class="text-2xl font-semibold font-outfit text-emerald-700 ml-0">
+    osv scanner web
+  </h1> -->
+</div>
+  <!-- <p class="text-sm text-gray-600 text-center animate-fade-up">
+    Upload your package.json to scan dependencies using OSV.dev.
+  </p> -->
+</header>
+
 
 <main class="p-6 max-w-4xl mx-auto">
   <FileUploadSection @package-json-loaded="handlePackageJsonLoaded" />
+  
 
   <div v-if="loading" class="mt-4 text-sm text-gray-600">
     Checking dependencies against OSV...
@@ -69,5 +78,7 @@ async function handlePackageJsonLoaded(data: PackageJson) {
     :results="results"
   />
 </main>
+
   </div>
+   <Footer />
 </template>

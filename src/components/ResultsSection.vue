@@ -23,7 +23,7 @@ const totalVulnerable = computed(
 </script>
 
 <template>
-  <section v-if="results.length" class="bg-white rounded-lg shadow p-6 mt-4">
+  <section v-if="results.length" class="bg-stone-100 rounded-lg shadow p-6 mt-4">
     <div class="flex items-center justify-between mb-4">
       <div>
         <h2 class="text-lg font-semibold">Scan Results</h2>
@@ -91,7 +91,7 @@ const totalVulnerable = computed(
     </table>
   </section>
 
-  <section v-else class="text-sm text-gray-500 mt-4">
+  <section v-else class="text-sm text-gray-500 mt-4 flex flex-col items-center">
     No scan results yet. Upload a package.json file to start.
   </section>
 </template>
