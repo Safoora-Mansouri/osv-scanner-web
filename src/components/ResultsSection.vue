@@ -39,6 +39,7 @@ const totalVulnerable = computed(
             type="radio"
             value="all"
             v-model="filter"
+              class="h-4 w-4 accent-emerald-700"
           />
           All
         </label>
@@ -47,6 +48,7 @@ const totalVulnerable = computed(
             type="radio"
             value="vulnerable"
             v-model="filter"
+          class="h-4 w-4 accent-emerald-700"
           />
           Vulnerable only
         </label>
