@@ -64,9 +64,9 @@
 
         <!-- Presentation -->
         <a
-          href="#presentation"
-          class="flex items-center gap-1 hover:text-white transition-colors duration-200"
-          aria-label="Project presentation"
+          href="https://www.canva.com/design/DAG6q-DOfSw/oienHCPRgfsFf1wS0q9LUg/view?utm_content=DAG6q-DOfSw&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
+  target="_blank"
+  class="flex items-center gap-1 hover:text-white transition-colors duration-200"
         >
           <svg
             class="w-6 h-6"
