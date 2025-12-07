@@ -27,10 +27,10 @@ const {
 </script>
 
 <template>
-  <div class="min-h-screen bg-stone-100 text-gray-900">
-    <header class="py-4 px-6 bg-stone-100 flex flex-col items-center">
+  <div class="min-h-screen flex flex-col bg-stone-100 text-gray-900">
+    <header class="py-6 px-6 bg-stone-100 flex flex-col items-center ">
       <div class="flex items-center">
-        <img src="/osv_logo.png" alt="OSV" class="w-20 h-20" />
+        <img src="/osv_logo.svg" alt="OSV" class="w-14 h-14 p-1" />
       </div>
     </header>
 
@@ -52,6 +52,7 @@ const {
     </main>
 
   
-  </div>
-    <Footer />
+     <Footer />
+    </div>
+ 
 </template>

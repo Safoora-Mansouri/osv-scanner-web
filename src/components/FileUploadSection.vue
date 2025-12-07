@@ -4,7 +4,7 @@
            border border-emerald-200 hover:shadow-lg
            transition-shadow duration-300 items-center"
   >
-    <h2 class="text-xl font-bold text-emerald-800 mb-6">
+    <h2 class="text-l font-bold text-emerald-800 mb-6">
       Upload <span>package.json</span>
     </h2>
 

@@ -77,7 +77,7 @@ const {
             v-model="filter"
             class="h-4 w-4 accent-emerald-700"
           />
-          Vulnerable only
+          Vulnerable
         </label>
       </div>
     </div>

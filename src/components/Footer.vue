@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-black text-gray-300 py-5 mt-auto">
+  <footer class="bg-black text-gray-300 py-3 mt-auto">
     <div
       class="max-w-5xl mx-auto px-4 
              flex flex-col sm:flex-row items-center 
@@ -93,6 +93,4 @@
   </footer>
 </template>
 
-<script setup>
-/* No script needed right now */
-</script>
+
