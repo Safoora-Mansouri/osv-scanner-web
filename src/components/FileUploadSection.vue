@@ -1,20 +1,15 @@
 <template>
   <section
-    class="  flex flex-col  bg-stone-200 rounded-xl shadow-md p-6 mb-6
+    class="flex flex-col bg-stone-200 rounded-xl shadow-md p-6 mb-6
            border border-emerald-200 hover:shadow-lg
            transition-shadow duration-300 items-center"
   >
     <h2 class="text-xl font-bold text-emerald-800 mb-6">
-      Upload <span class="">package.json</span>
+      Upload <span>package.json</span>
     </h2>
 
-    <!-- <p class="text-sm text-slate-700 mb-4">
-      Select your
-      <code class="text-emerald-700 font-medium">package.json</code>
-      file from your computer.
-    </p> -->
-
-    <!-- Emerald + soft blue upload button -->
+    <!-- Upload Button -->
+    <!-- Behaves like a styled button that triggers the hidden file input. -->
     <label
       class="flex items-center justify-center w-full px-4 py-3
              bg-teal-700
@@ -22,7 +17,7 @@
              cursor-pointer hover:from-emerald-200 hover:to-cyan-200
              transition-colors duration-200 font-medium gap-2"
     >
-      <!-- SVG icon -->
+      <!-- SVG icon (package.json upload icon) -->
       <svg
         class="w-6 h-6 text-white"
         viewBox="0 0 24 24"
@@ -47,6 +42,7 @@
 
       <span class="text-white">Select file</span>
 
+      <!-- Hidden file input; forwards the selected file into the composable -->
       <input
         type="file"
         accept=".json"
@@ -55,7 +51,7 @@
       />
     </label>
 
-    <!-- Error message -->
+    <!-- Error message from the composable -->
     <p
       v-if="error"
       class="text-red-600 text-sm mt-3
@@ -68,39 +64,44 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+/**
+ * FileUploadSection.vue
+ *
+ * This component is responsible for:
+ * - Presenting the upload UI (card + label + hidden file input)
+ * - Delegating all validation and parsing logic to usePackageJsonUpload
+ * - Emitting a strongly-typed `package-json-loaded` event upwards
+ */
+
 import type { PackageJson } from '../types/packageJson'
+import { usePackageJsonUpload } from '../composables/usePackageJsonUpload'
 
-const error = ref<string | null>(null)
-
+/**
+ * The parent (App.vue) listens for this event in order to start scanning.
+ */
 const emit = defineEmits<{
   (e: 'package-json-loaded', data: PackageJson): void
 }>()
 
+/**
+ * usePackageJsonUpload:
+ * - Provides an error message (if any)
+ * - Exposes a handleFile function to process the selected file
+ */
+const { error, handleFile } = usePackageJsonUpload((data) => {
+  emit('package-json-loaded', data)
+})
+
+/**
+ * onFileChange:
+ * Adapter between the native file input's change event and the composable.
+ * Extracts the selected file and passes it to handleFile.
+ */
 function onFileChange(event: Event) {
   const input = event.target as HTMLInputElement
-  const file = input.files?.[0]
-
-  if (!file) return
-
-  if (file.name !== 'package.json') {
-    error.value = 'Please select a package.json file.'
-    return
-  }
-
-  error.value = null
-
-  const reader = new FileReader()
-  reader.onload = () => {
-    try {
-      const text = reader.result as string
-      const json = JSON.parse(text) as PackageJson
-      emit('package-json-loaded', json)
-    } catch (e) {
-      error.value = 'Invalid JSON file.'
-    }
-  }
-
-  reader.readAsText(file)
+  const file = input.files?.[0] ?? null
+  handleFile(file)
 }
 </script>
+
+
