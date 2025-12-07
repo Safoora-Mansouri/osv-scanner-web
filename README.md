@@ -41,15 +41,22 @@ npm run dev
 
 Project Structure
 src/
+ ├── App.vue                 # Root layout (header, main, footer)
+ │
  ├── components/
- │    ├── FileUploadSection.vue
- │    └── ResultsSection.vue
+ │     ├── FileUploadSection.vue  # Upload + emits PackageJson
+ │     └── ResultsSection.vue     # Shows scan results
+ │
+ ├── composables/
+ │     └── useOsvScanner.ts       # Core scan logic and state
+ │
  ├── services/
- │    └── osvClient.ts
+ │     └── osvClient.ts           # OSV API integration
+ │
  ├── types/
- │    └── packageJson.ts
- ├── App.vue
- └── main.ts
+ │     └── packageJson.ts         # Type definitions
+ │
+ └── main.ts    
 
 ///////////////////////////////////////////////////////////
 
